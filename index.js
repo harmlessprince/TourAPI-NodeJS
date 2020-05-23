@@ -107,15 +107,17 @@ const deleteTour = (req, res) => {
   });
 };
 
-// Get all tours in the json file
-app.get("/api/v1/tours", getAllTours);
-// Create a new tours
-app.post("/api/v1/tours", createTour);
-// find a tour in the json file
-app.get("/api/v1/tours/:id", showTour);
+// // Get all tours in the json file
+// app.get("/api/v1/tours", getAllTours);
+// // Create a new tours
+// app.post("/api/v1/tours", createTour);
+// // find a tour in the json file
+// app.get("/api/v1/tours/:id", showTour);
+// //Update Tour
+// app.patch("/api/v1/tours/:id", updateTour);
+// //Destroy Tour
+// app.delete("/api/v1/tours/:id", deleteTour);
 
-app.patch("/api/v1/tours/:id", updateTour);
+app.route("/api/v1/tours").get(getAllTours).post(createTour);
 
-app.delete("/api/v1/tours/:id", deleteTour);
-
-
+app.route("/api/v1/tours/:id").patch(updateTour).delete(deleteTour).get(showTour);
