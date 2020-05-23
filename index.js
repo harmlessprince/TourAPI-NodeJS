@@ -15,8 +15,8 @@ app.listen(port, () => {
   console.log(`Listening to port......... ${port}`);
 });
 
-// Get all tours in the json file
-app.get("/api/v1/tours", (req, res) => {
+// shows the index of all tours
+const getAllTours = (req, res) => {
   console.log("Listening to home page");
   res.json({
     status: "success",
@@ -25,10 +25,10 @@ app.get("/api/v1/tours", (req, res) => {
       tours,
     },
   });
-});
+};
 
-// Create a new tours
-app.post("/api/v1/tours", (req, res) => {
+// Create a Tour
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
 
   const newTour = Object.assign({ id: newId }, req.body);
@@ -51,17 +51,13 @@ app.post("/api/v1/tours", (req, res) => {
       }
     }
   );
-});
+};
 
-// find a tour in the json file
-
-app.get("/api/v1/tours/:id", (req, res) => {
+// Show a tour with id
+const showTour = (req, res) => {
   // req.params //returns an object {id: "5"}
-
   let tourId = parseInt(req.params.id); //converts id to integer
-
   //   console.log(tourId);
-
   const tour = tours.find((el) => el.id === tourId);
   if (tour) {
     res.json({
@@ -76,11 +72,11 @@ app.get("/api/v1/tours/:id", (req, res) => {
       message: "Invalid ID supplied",
     });
   }
-});
+};
 
-app.patch("/api/v1/tours/:id", (req, res) => {
+//Update store function
+const updateTour = (req, res) => {
   // req.params //returns an object {id: "5"}
-
   let tourId = parseInt(req.params.id); //converts id to integer
 
   if (tourId > tours.length) {
@@ -93,25 +89,33 @@ app.patch("/api/v1/tours/:id", (req, res) => {
     status: "success",
     message: "Data Updatd",
   });
-});
+};
 
-
-
-app.delete("/api/v1/tours/:id", (req, res) => {
-    // req.params //returns an object {id: "5"}
-  
-    let tourId = parseInt(req.params.id); //converts id to integer
-  
-    if (tourId > tours.length) {
-      return res.status(404).json({
-        status: "error",
-        message: "ID not found",
-      });
-    }
-    res.status(204).json({
-      status: "success",
-      message: "Data deleted",
-      data: null
+const deleteTour = (req, res) => {
+  // req.params //returns an object {id: "5"}
+  let tourId = parseInt(req.params.id); //converts id to integer
+  if (tourId > tours.length) {
+    return res.status(404).json({
+      status: "error",
+      message: "ID not found",
     });
+  }
+  res.status(204).json({
+    status: "success",
+    message: "Data deleted",
+    data: null,
   });
-  
+};
+
+// Get all tours in the json file
+app.get("/api/v1/tours", getAllTours);
+// Create a new tours
+app.post("/api/v1/tours", createTour);
+// find a tour in the json file
+app.get("/api/v1/tours/:id", showTour);
+
+app.patch("/api/v1/tours/:id", updateTour);
+
+app.delete("/api/v1/tours/:id", deleteTour);
+
+
